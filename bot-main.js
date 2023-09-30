@@ -2,18 +2,17 @@ const mineflayer = require('mineflayer');
 const toolPlugin = require('mineflayer-tool').plugin
 var tpsPlugin = require('mineflayer-tps')(mineflayer)
 const readline = require('readline');
-const pass = require('./vars.js')
-// import {readfile} from 'fs/promises';
+
 
 let bot;
-let reconnectInterval;
 
 function startBot() {
   bot = mineflayer.createBot({
     host: 'tabmc.pl',
     port: 25565,
-    username: 'ChosnekGPT',
-    version: '1.16'
+    username: 'Chosnek1',
+    version: '1.18.2',
+    auth: 'microsoft'
   });
   bot.loadPlugin(toolPlugin)
   bot.loadPlugin(tpsPlugin)
@@ -23,8 +22,12 @@ function startBot() {
     setTimeout(polacz, 4000);
   });
 
-  bot.on('message', (message) => {
+  bot.on('message', (username, message, arg) => {
     console.log(message.toAnsi());
+
+    if(username == bot.name){
+      return
+    }
 
     if(message.toString().includes('kopuj')){
       startMining();
@@ -42,14 +45,14 @@ function startBot() {
       bot.chat('/sellall')
     }
     if(message.toString().includes('papuga')){
-      bot.chat('/tpa Chosnek1')
+      bot.chat('/tpa ChosnekGPT')
     }
     if(message.toString().includes('dT')){
       let block = bot.blockAtCursor(maxDistance=2)
       console.log(bot.digTime(block))
     }
-    if(message.toString().includes(`swing`)){
-      bot.setQuickBarSlot(1)
+    if(message.toString().includes(`swing `+ arg)){
+      bot.setQuickBarSlot(arg)
     }
     if(message.toString().includes('noAdm')){
       legitMining();
@@ -89,7 +92,7 @@ function resetReconnectInterval() {
 }
 
 function login() {
-  bot.chat('/login '+ pass);
+  bot.chat('/login H@k00las1ka?');
 }
 
 function polacz() {
@@ -156,16 +159,16 @@ function legitMining() {
 
 function crit(){
   block = bot.blockAtCursor(maxDistance=2)
-  bot.swingArm()
-  bot.dig(block)
-  setTimeout(crit, 400)
+  bot.tool.equipForBlock(block, {})
+  if(block) bot.dig(block)
+  setTimeout(crit, 800)
 }
 
 function logInventory() {
   console.log('Bot Inventory:');
   for (const item of bot.inventory.slots) {
     if (item) {
-      console.log(`${item.displayName} - ${item.count}`); 
+      console.log(`${item.displayName} - ${item.count}`);
     }
   }
 }
