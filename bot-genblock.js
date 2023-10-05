@@ -25,15 +25,8 @@ function startBot() {
 
   bot.on('message', (message) => {
     console.log(message.toAnsi());
-
-    if(message.toString().includes('kopuj')){
-      startMining();
-    }
     if(message.toString().includes('echo')){
       logInventory();
-    }
-    if(message.toString().includes('zaprzestaj')){
-      bot.stopDigging();
     }
     if(message.toString().includes('tps')){
       console.log(`Tps'y: ` + bot.getTps())
@@ -48,17 +41,14 @@ function startBot() {
       let block = bot.blockAtCursor(maxDistance=2)
       console.log(bot.digTime(block))
     }
-    if(message.toString().includes(`swing`)){
-      bot.setQuickBarSlot(1)
-    }
-    if(message.toString().includes('noAdm')){
-      legitMining();
-    }
-    if(message.toString().includes('CRIT')){
-      crit()
-    }
     if(message.toString().includes('recall')){
       bot.chat('/home')
+    }
+    if(message.toString().includes('cxGo')){
+      cobbleX();
+    }
+    if(message.toString().includes('kopuj')){
+      startMining();
     }
   });
 
@@ -100,41 +90,6 @@ function sendChatMessage(message) {
   bot.chat(message);
 }
 
-function startMining() {
-  const block = bot.blockAtCursor(maxDistance=2)
-  // bot.tool.equipForBlock(block, {})
-  bot.swingArm()
-
-  if(block.name=='null'){
-    setTimeout(1000)
-    return
-  }
-
-  if(block.name.includes('chest') || block.name.includes('plank') || block.name.includes('log') || block.name.includes('melon' || block.name.includes('sea'))){
-    bot.dig(block)
-  }
-  
-  setTimeout(startMining, 450)
-}
-
-function legitMining() {
-  var block = bot.blockAtCursor(maxDistance=2)
-
-  bot.swingArm()
-
-  if(!block) setTimeout(startMining, 500)
-  bot.tool.equipForBlock(block, {})
-  bot.dig(block)
-  setTimeout(legitMining, 500)
-}
-
-function crit(){
-  block = bot.blockAtCursor(maxDistance=2)
-  bot.swingArm()
-  bot.dig(block)
-  setTimeout(crit, 400)
-}
-
 function logInventory() {
   console.log('Bot Inventory:');
   for (const item of bot.inventory.slots) {
@@ -144,10 +99,43 @@ function logInventory() {
   }
 }
 
-function genMining() {
-  block = bot.blockAtCursor(maxDistance = 2)
-  bot.findBlocks(matching(block=='minecraft:diamond_ore'))
-  
+function cobbleX() {
+  bot.chat('/sklep');
+
+  setTimeout(() => {
+    bot.simpleClick.leftMouse(20)
+
+    setTimeout(() => {
+      bot.simpleClick.leftMouse(11);
+
+      setTimeout(() => {
+        bot.simpleClick.leftMouse(25);
+
+        setTimeout(() => {
+          bot.simpleClick.leftMouse(33);
+
+          setTimeout(() => {
+            bot.chat('/cx');
+            
+            setTimeout(() => {
+              bot.chat('/sell all');
+              cobbleX();
+
+            }, 500);
+          }, 500); 
+        }, 500); 
+      }, 500); 
+    }, 500); 
+  }, 500); 
+
+}
+
+function startMining() {
+  var block = bot.blockAtCursor(maxDistance = 2)
+  if(block.name.includes('blacks')){
+    return
+  }
+  bot.dig(block)
 }
 
 startBot();
