@@ -105,7 +105,7 @@ function logInventory() {
 }
 function startMining() {
   var block = bot.blockAtCursor(maxDistance = 2)
-  if(block.name.includes('ancient') || block.name.includes('glazed'))bot.dig(block)
+  if(block.name.includes('ancient') || block.name.includes('glazed') || block.name.includes('ore'))bot.dig(block)
   setTimeout(startMining,1000)
 }
 
