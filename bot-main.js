@@ -86,15 +86,6 @@ function sendChatMessage(message) {
   bot.chat(message);
 }
 
-
-
-function crit(){
-  block = bot.blockAtCursor(maxDistance=2)
-  bot.tool.equipForBlock(block, {})
-  if(block) bot.dig(block)
-  setTimeout(crit, 800)
-}
-
 function logInventory() {
   console.log('Bot Inventory:');
   for (const item of bot.inventory.slots) {
@@ -105,8 +96,20 @@ function logInventory() {
 }
 function startMining() {
   var block = bot.blockAtCursor(maxDistance = 2)
+  bot.swingArm()
   if(block.name.includes('ancient') || block.name.includes('glazed') || block.name.includes('ore'))bot.dig(block)
-  setTimeout(startMining,1000)
+  setTimeout(startMining, 500)
 }
+
+// function startMining2() {
+//   var block = bot.blockAtCursor(maxDistance = 2)
+//   bot.swingArm()
+//   if(block.name.includes('ancient') ||
+//     block.name.includes('glazed') || 
+//     block.name.includes('ore')
+//   ){
+//     bot.dig(block)
+//   }
+// }
 
 startBot();

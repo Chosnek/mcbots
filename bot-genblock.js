@@ -50,6 +50,9 @@ function startBot() {
     if(message.toString().includes('kopuj')){
       startMining();
     }
+    if(message.toString().includes('tossacoin')){
+      inv();
+    }
   });
 
   bot.on('end', () => {
@@ -132,10 +135,14 @@ function cobbleX() {
 
 function startMining() {
   var block = bot.blockAtCursor(maxDistance = 2)
-  if(block.name.includes('blacks')){
-    return
-  }
-  bot.dig(block)
+  bot.swingArm()
+  if(block.name.includes('ancient') || block.name.includes('glazed') || block.name.includes('ore') || block.name.includes('gilded'))bot.dig(block)
+  setTimeout(startMining, 500);
+}
+
+function inv(){
+  console.log(item.name)
+
 }
 
 startBot();
