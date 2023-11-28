@@ -44,7 +44,10 @@ function startBot() {
       cobbleX();
     }
     if(message.toString().includes('kopuj')){
-      startMining();
+      dig();
+    }
+    if(message.toString().includes('marko')){
+      bot.chat('polo!')
     }
   });
 
@@ -79,7 +82,7 @@ function login() {
 }
 
 function polacz() {
-  bot.chat('/polacz genblock');
+  bot.chat('/polacz oneblock');
 }
 
 function sendChatMessage(message) { 
@@ -94,22 +97,34 @@ function logInventory() {
     }
   }
 }
-function startMining() {
-  var block = bot.blockAtCursor(maxDistance = 2)
-  bot.swingArm()
-  if(block.name.includes('ancient') || block.name.includes('glazed') || block.name.includes('ore'))bot.dig(block)
-  setTimeout(startMining, 500)
-}
 
-// function startMining2() {
-//   var block = bot.blockAtCursor(maxDistance = 2)
-//   bot.swingArm()
-//   if(block.name.includes('ancient') ||
-//     block.name.includes('glazed') || 
-//     block.name.includes('ore')
-//   ){
-//     bot.dig(block)
-//   }
-// }
+async function dig() {
+  const block = bot.blockAtCursor(maxDistance=2)
+  bot.swingArm()
+
+  if (!bot.heldItem || !bot.heldItem.name.includes('axe')) {
+    const axe = bot.inventory.items.filter(i => i.name.includes('axe'))[0]
+     if (axe) await bot.equip(axe, 'hand');
+  }
+
+  if (!block) return setTimeout(() => dig(), 500)
+  // if(block.name.includes('chest') 
+  //   || block.name.includes('plank') 
+  //   || block.name.includes('log') 
+  //   || block.name.includes('melon')
+  //   || block.name.includes('stem')){
+  //     bot.tool.equipForBlock(block, {})
+      
+  //     
+  //     // bot.setQuickBarSlot(2)
+  // }
+  napraw()
+  await bot.dig(block)
+  console.log(block.name)
+  dig()
+}
+function napraw(){
+  bot.chat('/repair all')
+}
 
 startBot();

@@ -13,7 +13,7 @@ function startBot() {
     host: 'tabmc.pl',
     port: 25565,
     username: 'ChosnekGPT',
-    version: '1.16'
+    version: '1.18.2'
   });
   bot.loadPlugin(toolPlugin)
   bot.loadPlugin(tpsPlugin)
@@ -25,15 +25,8 @@ function startBot() {
 
   bot.on('message', (message) => {
     console.log(message.toAnsi());
-
-    if(message.toString().includes('kopuj')){
-      startMining();
-    }
     if(message.toString().includes('echo')){
       logInventory();
-    }
-    if(message.toString().includes('zaprzestaj')){
-      bot.stopDigging();
     }
     if(message.toString().includes('tps')){
       console.log(`Tps'y: ` + bot.getTps())
@@ -55,7 +48,7 @@ function startBot() {
       legitMining();
     }
     if(message.toString().includes('CRIT')){
-      crit()
+      dig()
     }
     if(message.toString().includes('recall')){
       bot.chat('/home')
@@ -159,6 +152,20 @@ function crit(){
   bot.swingArm()
   bot.dig(block)
   setTimeout(crit, 400)
+}
+
+async function dig() {
+  if (!bot.heldItem || !bot.heldItem.name.includes('pickaxe')) {
+    const pickaxe = bot.inventory.items().filter(i => i.name.includes('pickaxe'))[0];
+    if (pickaxe) await bot.equip(pickaxe, 'hand');
+    // if (!pickaxe) bot.quit();
+  }
+
+  const block = bot.blockAtCursor(4);
+  if (!block) return setTimeout(() => dig(), 200);
+
+  await bot.dig(block);
+  dig();
 }
 
 function logInventory() {
